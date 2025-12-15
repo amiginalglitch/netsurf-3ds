@@ -66,34 +66,37 @@ else
 endif
 
 
-
-# add framebuffer libnsfb ALWAYS for 3ds
-ifeq ($(TARGET),framebuffer)
-  NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG) libnsfb
+# only build what we require for the target
+ifeq ($(TARGET),riscos)
+  NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG) $(NSLIB_RO_TARG)
   NSBUILD_TARG := $(NSGENBIND_TARG)
 else
-  NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG)
-  NSBUILD_TARG := $(NSGENBIND_TARG)
- endif
-
+  ifeq ($(TARGET),framebuffer)
+	NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG)  $(NSLIB_FB_TARG)
+	NSBUILD_TARG := $(NSGENBIND_TARG)
   else
 	ifeq ($(TARGET),amiga)
 	  NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG)
 	  NSBUILD_TARG := $(NSGENBIND_TARG)
-	else
-	  ifeq ($(TARGET),cocoa)
-		NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG) 
-		NSBUILD_TARG := $(NSGENBIND_TARG)
-	  else
-		ifeq ($(TARGET),atari)
-		  NSLIB_TARG := $(NSLIB_ALL_TARG)
-		  NSBUILD_TARG := $(NSGENBIND_TARG)
-		else
-		  NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG) 
-		  NSBUILD_TARG := $(NSGENBIND_TARG)
-		endif
-	  endif
-	endif
+        else
+          ifeq ($(TARGET),3ds)
+                NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG) $(NSLIB_FB_TARG)
+                NSBUILD_TARG := $(NSGENBIND_TARG)
+          else
+            ifeq ($(TARGET),cocoa)
+                  NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG)
+                  NSBUILD_TARG := $(NSGENBIND_TARG)
+            else
+                  ifeq ($(TARGET),atari)
+                    NSLIB_TARG := $(NSLIB_ALL_TARG)
+                    NSBUILD_TARG := $(NSGENBIND_TARG)
+                  else
+                    NSLIB_TARG := $(NSLIB_ALL_TARG) $(NSLIB_SVGTINY_TARG)
+                    NSBUILD_TARG := $(NSGENBIND_TARG)
+                  endif
+            endif
+          endif
+        endif
   endif
 endif
 
